@@ -12,6 +12,7 @@ type LinearConstraint{T<:Real}
 end
 
 type Ellipsoid{T}
+	# Represents the set { x | x = C*u + d, ||u||_2 <= 1 }
 	C::Array{T, 2}
 	d::Array{T, 1}
 end
