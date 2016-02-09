@@ -5,3 +5,10 @@
 
 This package computes the Loewner-John inner and outer ellipsoids using Convex.jl. The inner ellipsoid is the maximum volume ellipsoid inscribed in a polyhedron. The outer ellipsoid is the *minimum* volume ellipsoid which fully contains a set of points.
 
+# Installation
+
+    julia> Pkg.clone("https://github.com/rdeits/LoewnerJohnEllipsoids.jl.git")
+
+# Usage
+
+See the tests in `test/runtests.jl`
