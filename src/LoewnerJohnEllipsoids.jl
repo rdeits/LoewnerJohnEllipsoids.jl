@@ -4,7 +4,8 @@ module LoewnerJohnEllipsoids
 using Convex
 export inner_ellipsoid,
 	   outer_ellipsoid,
-	   box
+	   box,
+	   barrier_value
 
 type LinearConstraint{T<:Real}
 	# Represents the constraint a * x <= b
@@ -13,12 +14,28 @@ type LinearConstraint{T<:Real}
 end
 
 type Ellipsoid{T}
-	# Represents the set { x | x = C*u + d, ||u||_2 <= 1 }
+	# Represents an ellipsoid as the set 
+	# { x | x = C*u + d, ||u||_2 <= 1 }
+	# or the set
+	# { x | ||(x - d)' * P' * P * (x - d) <= 1 }
+	# where P = inv(C)' * inv(C)
 	C::Array{T, 2}
 	d::Array{T, 1}
+	P::Array{T, 2}
+end
+
+Ellipsoid{T}(C::Array{T, 2}, d::Array{T, 1}) = begin
+	C_inv = inv(C)
+	Ellipsoid(C, d, C_inv' * C_inv)
 end
 
 Ellipsoid{T}(C::Array{T,2}, d::Array{T,2}) = Ellipsoid(C, vec(d))
+
+function barrier_value{T}(ell::Ellipsoid{T}, x)
+	# Evaluates the ellipsoid's barrier function, which is defined to be < 0
+	# inside the ellipsoid, 0 on the boundary, and > 0 outside
+	return ((x - ell.d)' * ell.P * (x - ell.d))[1] - 1
+end
 
 type Polyhedron{T}
 	constraints::Vector{LinearConstraint{T}}

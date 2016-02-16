@@ -29,3 +29,13 @@ function test_outer_unit_box()
 end
 test_outer_unit_box()
 
+function test_barrier()
+	polyhedron = box([1,1], [2,2])
+	e = inner_ellipsoid(polyhedron)
+	@test isapprox(barrier_value(e, [1,1.5]), 0, atol=1e-4)
+	@test isapprox(barrier_value(e, [2,1.5]), 0, atol=1e-4)
+	@test barrier_value(e, [1.5, 1.5]) < 0
+	@test barrier_value(e, [2.5, 2.5]) > 0
+end
+test_barrier()
+
