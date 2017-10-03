@@ -44,7 +44,7 @@ end
 function box{T}(lower::Vector{T}, upper::Vector{T})
 	@assert length(lower) == length(upper)
 	dimension = length(lower)
-	constraints = Array(LinearConstraint{T}, 2 * dimension)
+	constraints = Array{LinearConstraint{T}}(2 * dimension)
 	for i = 1:dimension
 		a = zeros(T, dimension)
 		a[i] = 1
